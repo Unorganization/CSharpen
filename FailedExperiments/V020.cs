@@ -15,7 +15,7 @@ public class V020
     public static TracingString Lift(string str, Logger logger)
        => new TracingString { str = str, logger = logger }; 
 
-    public static string Unit(TracingString ts) => ts.str;
+    public static string Unwrap(TracingString ts) => ts.str;
   }
 
   static Func<TracingString, TracingString> TracingUpperCase = i => 
@@ -50,7 +50,7 @@ public class V020
       .Pipe(TracingUpperCase)
       .Pipe(TracingFirstWord)
       .Pipe(TracingFixE);
-    Console.WriteLine($"{TracingString.Unit(output)}");
+    Console.WriteLine($"{TracingString.Unwrap(output)}");
     Console.WriteLine(output.logger.Dump());
   }
 }

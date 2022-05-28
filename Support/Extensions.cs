@@ -15,6 +15,29 @@ public static class Extensions
       {
           return x => func1(func2(x));
       }
+
+  // unit converts the value into a lifted value.
+  // unit :: Number -> (Number, LogMsg)
+  // var unit = (x) => [x, ''];
+  // example:
+  // var round = function(x) { return Math.round(x) };
+  // var roundDebug = function(x) { return unit(round(x)) };
+
+  //this type of conversion, from a ‘plain’ function to a debuggable one, can be abstracted into a function we’ll call lift
+  // lift :: (Number -> Number) -> (Number -> (Number,LosMsg))
+  /* The type signature says that lift takes a function with signature
+         Number -> Number
+      and returns a function with signature
+        Number -> (Number,String).
+*/
+  // var lift = (f) => compose(unit, f);
+
+  // var roundDebug = lift(round);
+
+
+
+
+  
   /*
     string result = FixE
       .Compose(FirstWord)

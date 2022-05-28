@@ -2,23 +2,12 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 
-public class V023
+public class V022
 {
   static Func<string, string> UpperCase = i => i.ToUpper();
   static Func<string, string> FirstWord = i => i.Split(" ")[0];
   static Func<string, string> FixE = i => i.Replace("E", "_");
 
-  class LiftedString<T>
-  {
-    public string str { get; set; }
-    public T other { get; set; }
-
-    public static LiftedString<T> Lift(string str, T other)
-       => new LiftedString<T> { str = str, other = other }; 
-
-    public static string Unit(TracingString ts) => ts.str;
-  }
-  
   class MetricString
   {
     public string str { get; set; }
@@ -27,7 +16,7 @@ public class V023
     public static MetricString Lift(string str, Metric metric)
        => new MetricString { str = str, metric = metric }; 
 
-    public static string Unit(MetricString ts) => ts.str;
+    public static string Unwrap(MetricString ts) => ts.str;
   }
   
   class TracingString
@@ -38,29 +27,16 @@ public class V023
     public static TracingString Lift(string str, Logger logger)
        => new TracingString { str = str, logger = logger }; 
 
-    public static string Unit(TracingString ts) => ts.str;
+    public static string Unwrap(TracingString ts) => ts.str;
   }
-
-  static Func<LiftedString<T>, LiftedString<T>> MakeLifted<T>(
-    Func<string, string> func,
-    Func<T, T> additionalProcessing
-    )
-  {
-      return i => 
-      {
-        var str = func(i.str);
-        var newOther = additionalProcessing(i.other);
-        return LiftedString<T>.Lift(str, newOther);
-      };
-  }
-
+  
   static Func<TracingString, TracingString> MakeTracing(Func<string, string> func)
   {
       return i => 
       {
-        var newStr = func(i.str);
-        var newLogger = i.logger.Log($"tracing: {newStr}");
-        return TracingString.Lift(newStr, newLogger);
+        var str = func(i.str);
+        var logger = i.logger.Log($"tracing: {str}");
+        return TracingString.Lift(str, logger);
       };
   }
 
@@ -68,9 +44,9 @@ public class V023
   {
       return i => 
       {
-        var newStr = func(i.str);
+        var str = func(i.str);
         var newMetric = i.metric.Measure();
-        return MetricString.Lift(newStr, newMetric);
+        return MetricString.Lift(str, newMetric);
       };
   }
 
@@ -82,7 +58,7 @@ public class V023
       .Pipe(MakeTracing(UpperCase))
       .Pipe(MakeTracing(FirstWord))
       .Pipe(MakeTracing(FixE));
-    Console.WriteLine($"{TracingString.Unit(output1)}");
+    Console.WriteLine($"{TracingString.Unwrap(output1)}");
     Console.WriteLine($"logger:");
     Console.WriteLine(output1.logger.Dump());
 
@@ -91,7 +67,7 @@ public class V023
       .Pipe(MakeMetric(UpperCase))
       .Pipe(MakeMetric(FirstWord))
       .Pipe(MakeMetric(FixE));
-    Console.WriteLine($"{MetricString.Unit(output2)}");
+    Console.WriteLine($"{MetricString.Unwrap(output2)}");
     Console.WriteLine($"metric:");
     Console.WriteLine(output2.metric.Dump());
   }

@@ -1,0 +1,3 @@
+git config --global credential.credentialStore cache
+git config --global credential.cacheoptions --timeout 31536000
+for password use PAT

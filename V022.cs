@@ -34,8 +34,10 @@ public class V022
   {
       return i => 
       {
+        var logger = i.logger.Log($"BEFORE: {i.str})");
         var str = func(i.str);
-        var logger = i.logger.Log($"tracing: {str}");
+        logger = logger.Log($"AFTER: {str}");
+
         return TracingString.Lift(str, logger);
       };
   }

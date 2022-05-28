@@ -1,1 +1,1 @@
-run = "set -e; csc *.cs /out:Main.exe; mono Main.exe"
+run = "set -e; csc /out:Main.exe /recurse:*.cs; mono Main.exe"

@@ -20,8 +20,9 @@ public class V2
 
   static Func<TracingString, TracingString> TracingUpperCase = i => 
   {
+    var logger = i.logger.Log($"BEFORE UpperCase({i.str})");
     var str = UpperCase(i.str);
-    var logger = i.logger.Log($"tracing: {str}");
+    var logger = i.logger.Log($"BEFORE UpperCase({str})");
     return TracingString.Lift(str, logger);
   };
   

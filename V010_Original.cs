@@ -1,6 +1,6 @@
 using System; 
 
-public class V1_Original
+public class V010_Original
 {
   static string UpperCase(string i) => i.ToUpper();
   static string FirstWord(string i) => i.Split(" ")[0];

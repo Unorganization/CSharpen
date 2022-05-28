@@ -2,12 +2,23 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 
-public class V22
+public class V023
 {
   static Func<string, string> UpperCase = i => i.ToUpper();
   static Func<string, string> FirstWord = i => i.Split(" ")[0];
   static Func<string, string> FixE = i => i.Replace("E", "_");
 
+  class LiftedString<T>
+  {
+    public string str { get; set; }
+    public T other { get; set; }
+
+    public static LiftedString<T> Lift(string str, T other)
+       => new LiftedString<T> { str = str, other = other }; 
+
+    public static string Unit(TracingString ts) => ts.str;
+  }
+  
   class MetricString
   {
     public string str { get; set; }
@@ -29,14 +40,27 @@ public class V22
 
     public static string Unit(TracingString ts) => ts.str;
   }
-  
-  static Func<TracingString, TracingString> MakeTracing(Func<string, string> func)
+
+  static Func<LiftedString<T>, LiftedString<T>> MakeLifted<T>(
+    Func<string, string> func,
+    Func<T, T> additionalProcessing
+    )
   {
       return i => 
       {
         var str = func(i.str);
-        var logger = i.logger.Log($"tracing: {str}");
-        return TracingString.Lift(str, logger);
+        var newOther = additionalProcessing(i.other);
+        return LiftedString<T>.Lift(str, newOther);
+      };
+  }
+
+  static Func<TracingString, TracingString> MakeTracing(Func<string, string> func)
+  {
+      return i => 
+      {
+        var newStr = func(i.str);
+        var newLogger = i.logger.Log($"tracing: {newStr}");
+        return TracingString.Lift(newStr, newLogger);
       };
   }
 
@@ -44,9 +68,9 @@ public class V22
   {
       return i => 
       {
-        var str = func(i.str);
+        var newStr = func(i.str);
         var newMetric = i.metric.Measure();
-        return MetricString.Lift(str, newMetric);
+        return MetricString.Lift(newStr, newMetric);
       };
   }
 

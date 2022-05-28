@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 
-public class V3
+public class V030
 {
   static Func<string, string> UpperCase = i => i.ToUpper();
   static Func<string, string> FirstWord = i => i.Split(" ")[0];

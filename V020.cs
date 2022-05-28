@@ -1,7 +1,7 @@
 using System; 
 
 
-public class V2
+public class V020
 {
   static Func<string, string> UpperCase = i => i.ToUpper();
   static Func<string, string> FirstWord = i => i.Split(" ")[0];
@@ -22,21 +22,23 @@ public class V2
   {
     var logger = i.logger.Log($"BEFORE UpperCase({i.str})");
     var str = UpperCase(i.str);
-    var logger = i.logger.Log($"BEFORE UpperCase({str})");
+    logger = logger.Log($"AFTER UpperCase({str})");
     return TracingString.Lift(str, logger);
   };
   
   static Func<TracingString, TracingString> TracingFirstWord = i => 
   {
+    var logger = i.logger.Log($"BEFORE FirstWord({i.str})");
     var str = FirstWord(i.str);
-    var logger = i.logger.Log($"tracing: {str}");
+    logger = logger.Log($"AFTER FirstWord({str})");
     return TracingString.Lift(str, logger);
   };
   
   static Func<TracingString, TracingString> TracingFixE = i => 
   {
+    var logger = i.logger.Log($"BEFORE FixE({i.str})");
     var str = FixE(i.str);
-    var logger = i.logger.Log($"tracing: {str}");
+    logger = logger.Log($"AFTER FixE({str})");
     return TracingString.Lift(str, logger);
   };
   
@@ -49,5 +51,6 @@ public class V2
       .Pipe(TracingFirstWord)
       .Pipe(TracingFixE);
     Console.WriteLine($"{TracingString.Unit(output)}");
+    Console.WriteLine(output.logger.Dump());
   }
 }

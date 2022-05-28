@@ -317,6 +317,9 @@ _Pvt_Extensions
 .paket/paket.exe
 paket-files/
 
+**/*.exe
+**/*.dll
+
 # FAKE - F# Make
 .fake/
 

@@ -16,6 +16,23 @@ public static class Extensions
           return x => func1(func2(x));
       }
 
+    public class Wrapped<TV, TP>
+    {
+      private readonly TV value;
+      private readonly TP payload;
+      public Wrapped(TV value, TP payload)
+      {
+        this.value = value;
+        this.payload = payload;
+      }
+
+        public (TV value, TP payload) Unwrap() => (value, payload);
+        public static Func<Wrapped<TV, TP>, Wrapped<TV, TP>> Create(Func<TV, TV> func, Func<Wrapped<TV, TP>, TP> wrapper)
+        {
+          return w => new Wrapped<TV, TP>(func(w.value), wrapper(w));
+        }
+    }
+
   // unit converts the value into a lifted value.
   // unit :: Number -> (Number, LogMsg)
   // var unit = (x) => [x, ''];

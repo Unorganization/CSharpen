@@ -33,7 +33,13 @@ public static class Extensions
         }
     }
 
-  // unit converts the value into a lifted value.
+    // Bind unwraps, but doesn't return the unwrapped.
+    //    Bind passes the unwrapped value to a function for process, which returns it back warpped.
+    // It's specific to each monad
+
+  // unit (sometimes called return) 
+  // takes a value from a plain type and creates the equivalent monadic value
+  // That is, converts the unamplified value into a lifted value.
   // unit :: Number -> (Number, LogMsg)
   // var unit = (x) => [x, ''];
   // example:
@@ -50,6 +56,8 @@ public static class Extensions
   // var lift = (f) => compose(unit, f);
 
   // var roundDebug = lift(round);
+
+  // here is often a way to get the unamplified type back out of the amplified type
 
 
 

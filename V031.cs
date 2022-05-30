@@ -3,10 +3,6 @@ using static V031_Extensions;
 
 public static class V031_Extensions
 {
-    public static TResult Pipe<TParam, TResult>(
-      this TParam @this,
-      Func<TParam, TResult> func) => func(@this);
-
     public class Wrapped<TV, TP>
     {
         private readonly TV value;

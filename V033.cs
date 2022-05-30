@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 public static partial class V033
 {
@@ -6,18 +7,18 @@ public static partial class V033
     static string FirstWord(string i) => i.Split(" ")[0];
     static string FixE(string i) => i.Replace("E", "_");
 
-    class Writer : Monad<Writer, string, string>, IMonad<Writer, string, string>
+    class Writer : Wrapper<Writer, string, string>
     {
-        public static Writer Create(string value) => new Writer().Create(value, default(string));
+        public override Writer GetDerived() => this;
 
-        public Writer Create(string value, string payload = default(string))
+        public override Writer Create(string value, string payload = default(string))
         {
             Value = value;
             Payload = payload ?? $"Initial value: {value}";
             return this;
         }
 
-        public string Handle(string oldPayload, string newPayload, string value)
+        public override string Handle(string oldPayload, string newPayload, string value)
         {
             return $"{oldPayload}\n{newPayload}: {value}";
         }
@@ -31,9 +32,9 @@ public static partial class V033
     {
         string input = "Kenneth is confused";
 
-        // Using Writer direclty
+        // Calling Run one at a time.
         {
-            var output = Writer.Create(input)
+            var output = Writer.Initial(input)
                 .Run(UpperCaseWithLog)
                 .Run(FirstWordWithLog)
                 .Run(FixEWithLog);
@@ -43,12 +44,12 @@ public static partial class V033
             Console.WriteLine(output.Payload);
         }
 
-        // Using a sequence
+        // Call Run with a sequence.
         {
-            var output = Writer.Run(input,
-                UpperCaseWithLog,
-                FirstWordWithLog,
-                FixEWithLog);
+            var output = Writer.Initial(input)
+                .Run(UpperCaseWithLog,
+                    FirstWordWithLog,
+                    FixEWithLog);
 
             Console.WriteLine($"Result: {output.Value}");
             Console.WriteLine($"Log:");

@@ -19,7 +19,7 @@ abstract class Wrapper<TDerived, TValue, TPayload> : ValueObject
     public abstract TDerived Create(TValue value, TPayload payload = default(TPayload));
     public abstract TPayload Handle(TPayload oldPayload, TPayload newPayload, TValue value);
 
-    public static TDerived Initial(TValue value) => new TDerived().Create(value, default(TPayload));
+    public static TDerived Initial(TValue value, TPayload payload = default(TPayload)) => new TDerived().Create(value, payload);
 
     public static Func<TValue, TDerived> Lift(Func<TValue, TValue> func, TPayload payload) => v => new TDerived { Value = func(v), Payload = payload };
 

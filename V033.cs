@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 
 public static partial class V033
 {
@@ -24,9 +23,9 @@ public static partial class V033
         }
     }
 
-    static Func<string, Writer> UpperCaseWithLog = Writer.Lift(UpperCase, "Called UpperCase");
-    static Func<string, Writer> FirstWordWithLog = Writer.Lift(FirstWord, "Called FirstWord");
-    static Func<string, Writer> FixEWithLog = Writer.Lift(FixE, "Called FixE");
+    static readonly Func<string, Writer> UpperCaseWithLog = Writer.Lift(UpperCase, "Called UpperCase");
+    static readonly Func<string, Writer> FirstWordWithLog = Writer.Lift(FirstWord, "Called FirstWord");
+    static readonly Func<string, Writer> FixEWithLog = Writer.Lift(FixE, "Called FixE");
 
     public static void Run()
     {
@@ -40,7 +39,7 @@ public static partial class V033
                 .Run(FixEWithLog);
 
             Console.WriteLine($"Result: {output.Value}");
-            Console.WriteLine($"Log:");
+            Console.WriteLine("Log:");
             Console.WriteLine(output.Payload);
         }
 
@@ -52,7 +51,7 @@ public static partial class V033
                     FixEWithLog);
 
             Console.WriteLine($"Result: {output.Value}");
-            Console.WriteLine($"Log:");
+            Console.WriteLine("Log:");
             Console.WriteLine(output.Payload);
         }
     }

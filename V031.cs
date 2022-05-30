@@ -32,15 +32,15 @@ public class V031
         string input = "Kenneth is confused";
 
         Func<Wrapped<string, Diag>, Wrapped<string, Diag>>
-          WithMsg<T>(Func<string, string> func)
+          WithMsg(Func<string, string> func)
               => Wrapped<string, Diag>.Create(func, w
                   => new Diag(w.Unwrap().Pipe(_ => _.payload.msg + "\n" + $"Msg: {_.value}")));
 
         var output = new Wrapped<string, Diag>(input, new Diag())
-          .Pipe(WithMsg<Diag>(UpperCase))
-          .Pipe(WithMsg<Diag>(FirstWord))
-          .Pipe(WithMsg<Diag>(FixE));
-        (var value, var diagnostics) = output.Unwrap();
+          .Pipe(WithMsg(UpperCase))
+          .Pipe(WithMsg(FirstWord))
+          .Pipe(WithMsg(FixE));
+        var (value, diagnostics) = output.Unwrap();
         Console.WriteLine($"{value}");
         Console.WriteLine($"Log:{diagnostics.msg}");
     }

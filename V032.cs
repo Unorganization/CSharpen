@@ -19,7 +19,7 @@ public static class V032
 
         public static Func<string, Writer> Lift(Func<string, string> func, string log) => v => new Writer { Value = func(v), Log = log };
 
-        public Writer Bind(Func<string, Writer> func)
+        public Writer Run(Func<string, Writer> func)
         {
             var neww = func(this.Value);
             return new Writer { Value = neww.Value, Log = $"{this.Log}\n{neww.Log}: {neww.Value}" };
@@ -31,9 +31,9 @@ public static class V032
         string input = "Kenneth is confused";
 
         var output = Writer.Create(input)
-            .Bind(UpperCaseWithLog)
-            .Bind(FirstWordWithLog)
-            .Bind(FixEWithLog);
+            .Run(UpperCaseWithLog)
+            .Run(FirstWordWithLog)
+            .Run(FixEWithLog);
 
         Console.WriteLine($"Result: {output.Value}");
         Console.WriteLine($"Log:");

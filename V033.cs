@@ -6,7 +6,7 @@ public static partial class V033
     static string FirstWord(string i) => i.Split(" ")[0];
     static string FixE(string i) => i.Replace("E", "_");
 
-    class Writer : Wrapper<Writer, string, string>
+    class Writer : ValueObjectEx<Writer, string, string>
     {
         public override Writer GetDerived() => this;
 

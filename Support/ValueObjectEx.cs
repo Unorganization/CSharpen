@@ -2,9 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-abstract class Wrapper<TDerived, TValue, TPayload> : ValueObject
+/// <summary>
+/// ValueObject with an abstract payload.
+/// </summary>
+/// <typeparam name="TDerived"></typeparam>
+/// <typeparam name="TValue"></typeparam>
+/// <typeparam name="TPayload"></typeparam>
+abstract class ValueObjectEx<TDerived, TValue, TPayload> : ValueObject
     where TDerived :
-        Wrapper<TDerived, TValue, TPayload>,
+        ValueObjectEx<TDerived, TValue, TPayload>,
         new()
 {
     public TValue Value { get; set; }
